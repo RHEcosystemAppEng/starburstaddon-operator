@@ -1,4 +1,4 @@
-# Styarburst Addon Operator
+# Starburst Addon Operator
 
 **TOC**
 - [scaffolding](#scaffolding)
