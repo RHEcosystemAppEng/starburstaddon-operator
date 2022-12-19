@@ -1,4 +1,4 @@
-apiVersion: addon.starburst.io/v1alpha1
+apiVersion: managed-tenants.redhat.com/v1alpha1
 kind: StarburstAddon
 metadata:
   labels:

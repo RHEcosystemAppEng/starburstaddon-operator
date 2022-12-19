@@ -1,4 +1,4 @@
-domain: starburst.io
+domain: redhat.com
 layout:
 - go.kubebuilder.io/v3
 plugins:
@@ -11,8 +11,8 @@ resources:
     crdVersion: v1
     namespaced: true
   controller: true
-  domain: starburst.io
-  group: addon
+  domain: redhat.com
+  group: managed-tenants
   kind: StarburstAddon
   path: github.com/RHEcosystemAppEng/starburstaddon-operator/api/v1alpha1
   version: v1alpha1

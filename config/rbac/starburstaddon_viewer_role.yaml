@@ -12,7 +12,7 @@ metadata:
   name: starburstaddon-viewer-role
 rules:
 - apiGroups:
-  - addon.starburst.io
+  - managed-tenants.redhat.com
   resources:
   - starburstaddons
   verbs:
@@ -20,7 +20,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - addon.starburst.io
+  - managed-tenants.redhat.com
   resources:
   - starburstaddons/status
   verbs:

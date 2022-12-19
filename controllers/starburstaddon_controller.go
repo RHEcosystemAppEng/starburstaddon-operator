@@ -24,7 +24,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	addonv1alpha1 "github.com/RHEcosystemAppEng/starburstaddon-operator/api/v1alpha1"
+	managedtenantsv1alpha1 "github.com/RHEcosystemAppEng/starburstaddon-operator/api/v1alpha1"
 )
 
 // StarburstAddonReconciler reconciles a StarburstAddon object
@@ -33,9 +33,9 @@ type StarburstAddonReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=addon.starburst.io,resources=starburstaddons,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=addon.starburst.io,resources=starburstaddons/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=addon.starburst.io,resources=starburstaddons/finalizers,verbs=update
+//+kubebuilder:rbac:groups=managed-tenants.redhat.com,resources=starburstaddons,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=managed-tenants.redhat.com,resources=starburstaddons/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=managed-tenants.redhat.com,resources=starburstaddons/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -57,6 +57,6 @@ func (r *StarburstAddonReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 // SetupWithManager sets up the controller with the Manager.
 func (r *StarburstAddonReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&addonv1alpha1.StarburstAddon{}).
+		For(&managedtenantsv1alpha1.StarburstAddon{}).
 		Complete(r)
 }
