@@ -4,7 +4,7 @@
 - [scaffolding](#scaffolding)
 - [local development](#local-development)
 - [Staging Testing](#staging-testing)
-- [Staging Testing](#staging-testing-detailed)
+- [Staging Testing Detailed](#staging-testing-detailed)
 - [Expected Secrets](#expected-secrets)
 - [Parameters for Generic Operator](#parameters-for-generic-operator)
 - [Helpful Links](#helpful-links)
