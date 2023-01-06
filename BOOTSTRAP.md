@@ -124,7 +124,7 @@ Run the Bundle in OSD
 ```bash
 kubectl create ns redhat-starburst-operator
 
-operator-sdk run bundle quay.io/cwylie1/addon-operator-bundle:v0.0.1
+operator-sdk run bundle quay.io/ecosystem-appeng/starburstaddon-operator-bundle:v0.0.1
 
 kubectl config set-context $(k config current-context) --namespace=redhat-starburst-operator
 ```
