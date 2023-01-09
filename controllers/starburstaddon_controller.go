@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"time"
 
+	configv1 "github.com/openshift/api/config/v1"
 	promv1 "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -61,6 +62,7 @@ type StarburstAddonReconciler struct {
 // +kubebuilder:rbac:groups=monitoring.coreos.com,resources=prometheusrules,verbs=get;list;watch;create;update;patch
 // +kubebuilder:rbac:groups=monitoring.coreos.com,resources=podmonitors,verbs=get;list;watch;update;patch
 // +kubebuilder:rbac:groups=monitoring.coreos.com,resources=servicemonitors,verbs=get;list;watch;update;patch;create;delete
+// +kubebuilder:rbac:groups=config.openshift.io,resources=clusterversions,verbs=get;list;watch;update;patch;create;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -88,6 +90,20 @@ func (r *StarburstAddonReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		}
 
 		return ctrl.Result{}, fmt.Errorf("could not get Addon CR: %v", err)
+	}
+
+	// Fetch clusterversion instance
+	cv := &configv1.ClusterVersion{}
+	if err := r.Client.Get(ctx, types.NamespacedName{
+		Name: "version",
+	}, cv); err != nil {
+
+		if k8serrors.IsNotFound(err) {
+			logger.Info("ClusterVersion not found")
+			return ctrl.Result{}, nil
+		}
+
+		return ctrl.Result{}, fmt.Errorf("could not get ClusterVersion CR: %v", err)
 	}
 
 	// Fetch User Params Secret
@@ -148,7 +164,7 @@ func (r *StarburstAddonReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	}, prometheus); err != nil && k8serrors.IsNotFound(err) {
 		logger.Info("Prometheus not found. Creating...")
 		// tokenURL, remoteWriteURL, clusterID string
-		prometheus = r.DeployPrometheus(string(vault.Data["token-url"]), string(vault.Data["remote-write-url"]), fetchClusterID())
+		prometheus = r.DeployPrometheus(string(vault.Data["token-url"]), string(vault.Data["remote-write-url"]), fetchClusterID(cv))
 		if err := r.Client.Create(ctx, prometheus); err != nil {
 			logger.Error(err, "Could not create Prometheus")
 			return ctrl.Result{Requeue: true}, fmt.Errorf("could not create Prometheus: %v", err)
@@ -245,6 +261,7 @@ func (r *StarburstAddonReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&promv1.Prometheus{}).
 		Owns(&corev1.Secret{}).
 		Owns(&batchv1.CronJob{}).
+		Owns(&configv1.ClusterVersion{}).
 		Complete(r)
 }
 
@@ -632,6 +649,7 @@ func (r *StarburstAddonReconciler) DeployFederationServiceMonitor() *promv1.Serv
 	}
 }
 
-func fetchClusterID() string {
-	return "1v529ivvikohbpg8pgfihegcdjhudjng"
+func fetchClusterID(cv *configv1.ClusterVersion) string {
+	clusterID := cv.Spec.ClusterID
+	return string(clusterID)
 }
