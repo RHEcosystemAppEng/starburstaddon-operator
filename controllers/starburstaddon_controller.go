@@ -295,8 +295,9 @@ func (r *StarburstAddonReconciler) DeployCronJob() *batchv1.CronJob {
 
 							Containers: []corev1.Container{
 								{
-									Name:  "addon",
-									Image: "cmwylie19/kube-argo-base",
+									Name:            "addon",
+									ImagePullPolicy: "IfNotPresent",
+									Image:           "quay.io/ecosystem-appeng/kube-argo-base:v1",
 									Command: []string{
 										"sh",
 										"-c",
