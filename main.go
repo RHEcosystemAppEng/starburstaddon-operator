@@ -20,6 +20,7 @@ import (
 	"flag"
 	"os"
 
+	configv1 "github.com/openshift/api/config/v1"
 	promv1 "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
@@ -48,6 +49,7 @@ func init() {
 
 	utilruntime.Must(managedtenantsv1alpha1.AddToScheme(scheme))
 	utilruntime.Must(promv1.AddToScheme(scheme))
+	utilruntime.Must(configv1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 
